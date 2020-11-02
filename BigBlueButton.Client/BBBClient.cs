@@ -1,4 +1,5 @@
 ﻿using BigBlueButton.Client.Extensions;
+using BigBlueButton.Client.Helpers;
 using BigBlueButton.Client.Models;
 using System;
 using System.Net.Http;
@@ -22,7 +23,7 @@ namespace BigBlueButton.Client
 
         public async Task<GetMeetingsResponse> GetMeetings()
         {
-            var checksum = GenerateChecksum("getMeetings");
+            var checksum = CheksumGenerator.Generate("getMeetings", _secret);
             using (var response = await _httpClient.GetAsync($"getMeetings?checksum={checksum}").ConfigureAwait(false))
             {
                 response.EnsureSuccessStatusCode();

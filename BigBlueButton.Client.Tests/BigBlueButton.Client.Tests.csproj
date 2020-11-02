@@ -19,4 +19,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BigBlueButton.Client\BigBlueButton.Client.csproj" />
+  </ItemGroup>
+
 </Project>
