@@ -103,13 +103,8 @@ namespace BigBlueButton.Client.Models
 	}
 
 	[XmlRoot(ElementName = "response")]
-	public class GetMeetingsResponse
+	public class GetMeetingsResponse : BBBResponse
 	{
-		[XmlElement(ElementName = "returncode")]
-		public string Returncode { get; set; }
-		public string MessageKey { get; set; }
-		[XmlElement(ElementName = "message")]
-		public string Message { get; set; }
 		[XmlElement(ElementName = "meetings")]
 		public Meetings Meetings { get; set; }
 	}
