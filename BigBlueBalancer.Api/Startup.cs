@@ -1,3 +1,4 @@
+using BigBlueButton.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -5,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using System;
+using System.Net.Http;
 
 namespace BigBlueBalancer.Api
 {
@@ -23,6 +26,16 @@ namespace BigBlueBalancer.Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BigBlueBalancer.Api", Version = "v1" });
+            });
+
+            services.AddHttpClient("BigBlueButton", client =>
+            {
+                client.BaseAddress = new Uri("https://montclair-confs.artere.ma/bigbluebutton/api/");
+            });
+            services.AddScoped<IBBBClient, BBBClient>(sp =>
+            {
+                var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("BigBlueButton");
+                return new BBBClient(httpClient, "U5oVXerwGeAn7zVZ1E5J2HlvBj7HqEqzaozy3h9jQ");
             });
         }
 

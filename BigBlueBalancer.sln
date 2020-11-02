@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.30509.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigBlueBalancer.Api", "BigBlueBalancer.Api\BigBlueBalancer.Api.csproj", "{364053ED-0E24-42E0-9438-DCC5F9077AFD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigBlueButton.Client", "BigBlueButton.Client\BigBlueButton.Client.csproj", "{6EFABD09-B412-4380-9715-DFBDF7689698}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigBlueButton.Client.Tests", "BigBlueButton.Client.Tests\BigBlueButton.Client.Tests.csproj", "{99EC515D-F77C-426F-AB22-48012E80CCA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{364053ED-0E24-42E0-9438-DCC5F9077AFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{364053ED-0E24-42E0-9438-DCC5F9077AFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{364053ED-0E24-42E0-9438-DCC5F9077AFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EFABD09-B412-4380-9715-DFBDF7689698}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EFABD09-B412-4380-9715-DFBDF7689698}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EFABD09-B412-4380-9715-DFBDF7689698}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EFABD09-B412-4380-9715-DFBDF7689698}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99EC515D-F77C-426F-AB22-48012E80CCA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99EC515D-F77C-426F-AB22-48012E80CCA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99EC515D-F77C-426F-AB22-48012E80CCA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99EC515D-F77C-426F-AB22-48012E80CCA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

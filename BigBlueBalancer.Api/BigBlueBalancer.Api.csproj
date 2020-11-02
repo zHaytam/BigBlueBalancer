@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\BigBlueButton.Client\BigBlueButton.Client.csproj" />
   </ItemGroup>
 
 </Project>
