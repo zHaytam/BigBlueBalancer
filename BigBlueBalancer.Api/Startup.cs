@@ -31,13 +31,13 @@ namespace BigBlueBalancer.Api
 
             services.AddHttpClient("BigBlueButton", client =>
             {
-                client.BaseAddress = new Uri("https://montclair-confs.artere.ma/bigbluebutton/api/");
+                client.BaseAddress = new Uri(Configuration["TestBbbApiUrl"]);
             });
             services.AddScoped<IBBBClient, BBBClient>(sp =>
             {
                 var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("BigBlueButton");
                 var logger = sp.GetRequiredService<ILogger<BBBClient>>();
-                return new BBBClient(httpClient, "U5oVXerwGeAn7zVZ1E5J2HlvBj7HqEqzaozy3h9jQ", logger);
+                return new BBBClient(httpClient, Configuration["TestBbbSecret"], logger);
             });
         }
 
