@@ -1,12 +1,11 @@
 ﻿using System.Xml.Serialization;
 
-namespace BigBlueButton.Client.Models
+namespace BigBlueButton.Client.Models.Responses
 {
     public class BBBResponse
     {
-
         [XmlElement(ElementName = "returncode")]
-        public string Returncode { get; set; }
+        public string ReturnCode { get; set; }
         [XmlElement(ElementName = "messageKey")]
         public string MessageKey { get; set; }
         [XmlElement(ElementName = "message")]

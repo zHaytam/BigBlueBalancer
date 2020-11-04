@@ -1,4 +1,4 @@
-﻿using BigBlueButton.Client.Models;
+﻿using BigBlueButton.Client.Models.Responses;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Serialization;

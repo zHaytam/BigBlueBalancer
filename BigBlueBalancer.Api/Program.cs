@@ -10,13 +10,14 @@ namespace BigBlueBalancer.Api
     {
         public static int Main(string[] args)
         {
+            var loggerTemplate = "{Timestamp:HH:mm:ss} [{Level:u3}] [{SourceContext}] {Message}{NewLine}{Exception}";
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 15)
+                .WriteTo.Console(outputTemplate: loggerTemplate)
+                .WriteTo.File("Logs/log.txt", outputTemplate: loggerTemplate, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 15)
                 .CreateLogger();
 
             try

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System;
@@ -35,7 +36,8 @@ namespace BigBlueBalancer.Api
             services.AddScoped<IBBBClient, BBBClient>(sp =>
             {
                 var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("BigBlueButton");
-                return new BBBClient(httpClient, "U5oVXerwGeAn7zVZ1E5J2HlvBj7HqEqzaozy3h9jQ");
+                var logger = sp.GetRequiredService<ILogger<BBBClient>>();
+                return new BBBClient(httpClient, "U5oVXerwGeAn7zVZ1E5J2HlvBj7HqEqzaozy3h9jQ", logger);
             });
         }
 
