@@ -36,10 +36,7 @@ namespace BigBlueButton.Client.Parameters
                 if (value == null)
                     continue;
 
-                var strValue = value.ToString();
-                if (entry.Encode)
-                    strValue = HttpUtility.UrlEncode(strValue);
-
+                var strValue = HttpUtility.UrlEncode(value.ToString());
                 sb.Append($"{entry.Name}={strValue}&");
             }
 
@@ -51,9 +48,8 @@ namespace BigBlueButton.Client.Parameters
         {
             var attr = property.GetCustomAttribute<BBBParameterAttribute>();
             var name = attr?.Name ?? ToCamelCase(property.Name);
-            var encode = attr?.Encode ?? false;
             var getter = GenerateGetterLambda(property);
-            return new ParameterEntry(name, attr?.Required ?? false, encode, getter);
+            return new ParameterEntry(name, attr?.Required ?? false, getter);
         }
 
         private static Func<object, object> GenerateGetterLambda(PropertyInfo property)
@@ -70,17 +66,15 @@ namespace BigBlueButton.Client.Parameters
 
     class ParameterEntry
     {
-        public ParameterEntry(string name, bool required, bool encode, Func<object, object> getter)
+        public ParameterEntry(string name, bool required, Func<object, object> getter)
         {
             Name = name;
             Getter = getter;
             Required = required;
-            Encode = encode;
         }
 
         public string Name { get; }
         public bool Required { get; }
-        public bool Encode { get; }
         public Func<object, object> Getter { get; }
     }
 }
