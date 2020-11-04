@@ -6,9 +6,10 @@ namespace BigBlueButton.Client
 {
     public interface IBBBClient
     {
-        Task<CreateResponse> Create(CreateRequest request);
+        public Task<CreateResponse> Create(CreateRequest request);
+        public string GetJoinUrl(JoinRequest request);
 
-        Task<GetMeetingsResponse> GetMeetings();
-        Task<GetMeetingInfoResponse> GetMeetingInfo(string meetingId);
+        public Task<GetMeetingsResponse> GetMeetings();
+        public Task<GetMeetingInfoResponse> GetMeetingInfo(string meetingId);
     }
 }

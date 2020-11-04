@@ -5,12 +5,12 @@ namespace BigBlueButton.Client.Models.Requests
     public class CreateRequest
     {
         public string Name { get; set; }
-        [BBBParameter("meetingID", Required = true)]
+        [BBBParameter("meetingID", required: true)]
         public string MeetingId { get; set; }
         [BBBParameter("attendeePW")]
-        public string AttendeePw { get; set; }
+        public string AttendeePassword { get; set; }
         [BBBParameter("moderatorPW")]
-        public string ModeratorPw { get; set; }
+        public string ModeratorPassword { get; set; }
         public string Welcome { get; set; }
         public string DialNumber { get; set; }
         public string VoiceBridge { get; set; }
@@ -41,9 +41,9 @@ namespace BigBlueButton.Client.Models.Requests
         public bool? LockSettingsLockOnJoinConfigurable { get; set; }
         public string GuestPolicy { get; set; }
 
-        [BBBParameter("meta_endCallbackUrl", Encode = true)]
+        [BBBParameter("meta_endCallbackUrl")]
         public string EndMeetingCallbackUrl { get; set; }
-        [BBBParameter("meta_bbb-recording-ready-url", Encode = true)]
+        [BBBParameter("meta_bbb-recording-ready-url")]
         public string RecordingReadyCallbackUrl { get; set; }
 
         public CreateRequest(string meetingId)

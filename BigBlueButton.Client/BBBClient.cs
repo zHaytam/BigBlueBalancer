@@ -30,6 +30,9 @@ namespace BigBlueButton.Client
         public async Task<CreateResponse> Create(CreateRequest request)
             => await ExecuteRequest<CreateResponse>("create", ParametersExtractor.GenerateQueryString(request));
 
+        public string GetJoinUrl(JoinRequest request)
+            => ConstructUrl("join", ParametersExtractor.GenerateQueryString(request), true);
+
         #endregion
 
         #region Monitoring
@@ -51,15 +54,19 @@ namespace BigBlueButton.Client
             return await ExecuteRequest<T>(callName, query).ConfigureAwait(false);
         }
 
-        private async Task<T> ExecuteRequest<T>(string callName, string query) where T : BBBResponse
+        private string ConstructUrl(string callName, string query, bool full = false)
         {
             var checksum = CheksumGenerator.Generate(callName, _secret, query);
             var url = $"{callName}?{query}&checksum={checksum}";
-            _logger.LogDebug(url);
-            var response = await _httpClient
-                .GetAsync($"{callName}?{query}&checksum={checksum}")
-                .ConfigureAwait(false);
+            if (full) url = $"{_httpClient.BaseAddress}{url}";
+            return url;
+        }
 
+        private async Task<T> ExecuteRequest<T>(string callName, string query) where T : BBBResponse
+        {
+            var url = ConstructUrl(callName, query);
+            _logger.LogDebug($"{_httpClient.BaseAddress}{url}");
+            var response = await _httpClient.GetAsync(url).ConfigureAwait(false);
             return await HandleResponse<T>(response).ConfigureAwait(false);
         }
 
