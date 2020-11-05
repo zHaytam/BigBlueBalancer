@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using BigBlueBalancer.Api.DTOs;
+using BigBlueBalancer.Api.DTOs.Servers;
 using BigBlueBalancer.Api.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,5 +25,13 @@ namespace BigBlueBalancer.Api.Controllers
         [HttpGet]
         public async Task<List<ServerDto>> List()
             => await _appDbContext.Servers.ProjectTo<ServerDto>(_mapper.ConfigurationProvider).ToListAsync();
+
+        [HttpPost]
+        public async Task<ServerDto> Create(NewServerDto dto)
+        {
+            var server = await _appDbContext.Servers.AddAsync(_mapper.Map<Server>(dto));
+            await _appDbContext.SaveChangesAsync();
+            return _mapper.Map<ServerDto>(server.Entity);
+        }
     }
 }

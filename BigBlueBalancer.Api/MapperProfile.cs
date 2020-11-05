@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BigBlueBalancer.Api.DTOs;
+using BigBlueBalancer.Api.DTOs.Servers;
 using BigBlueBalancer.Api.Entities;
 
 namespace BigBlueBalancer.Api
@@ -9,6 +9,7 @@ namespace BigBlueBalancer.Api
         public MapperProfile()
         {
             CreateMap<Server, ServerDto>();
+            CreateMap<NewServerDto, Server>();
         }
     }
 }

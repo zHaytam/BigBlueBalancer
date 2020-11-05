@@ -1,4 +1,4 @@
-﻿namespace BigBlueBalancer.Api.DTOs
+﻿namespace BigBlueBalancer.Api.DTOs.Servers
 {
     public class ServerDto : BaseEntityDto
     {
