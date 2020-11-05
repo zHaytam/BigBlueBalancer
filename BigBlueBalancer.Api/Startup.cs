@@ -1,6 +1,8 @@
+using BigBlueBalancer.Api.Entities;
 using BigBlueButton.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +28,8 @@ namespace BigBlueBalancer.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BigBlueBalancer.Api", Version = "v1" });
             });
 
+            services.AddHttpClient();
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IBBBClient, BBBClient>();
         }
 
