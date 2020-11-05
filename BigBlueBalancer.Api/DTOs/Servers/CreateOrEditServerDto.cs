@@ -2,7 +2,7 @@
 
 namespace BigBlueBalancer.Api.DTOs.Servers
 {
-    public class NewServerDto
+    public class CreateOrEditServerDto
     {
         [Url]
         [Required]

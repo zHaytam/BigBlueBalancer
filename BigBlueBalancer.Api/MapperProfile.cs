@@ -9,7 +9,7 @@ namespace BigBlueBalancer.Api
         public MapperProfile()
         {
             CreateMap<Server, ServerDto>();
-            CreateMap<NewServerDto, Server>();
+            CreateMap<CreateOrEditServerDto, Server>();
         }
     }
 }
