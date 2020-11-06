@@ -1,5 +1,6 @@
 using AutoMapper;
 using BigBlueBalancer.Api.Entities;
+using BigBlueBalancer.Api.Tasks;
 using BigBlueButton.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +34,8 @@ namespace BigBlueBalancer.Api
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IBBBClient, BBBClient>();
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddHostedService<ServersStatsBackgroundService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

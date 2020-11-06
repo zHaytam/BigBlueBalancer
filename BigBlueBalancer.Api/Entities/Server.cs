@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Collections.Generic;
 
 namespace BigBlueBalancer.Api.Entities
 {
@@ -8,6 +9,10 @@ namespace BigBlueBalancer.Api.Entities
         public short Id { get; set; }
         public string Url { get; set; }
         public string Secret { get; set; }
+        public bool Up { get; set; }
+        public double Load { get; set; }
+
+        public List<ServerStats> Stats { get; set; } = new List<ServerStats>();
     }
 
     public class ServerConfiguration : IEntityTypeConfiguration<Server>

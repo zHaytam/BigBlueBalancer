@@ -19,6 +19,7 @@ namespace BigBlueBalancer.Api.Entities
                 {
                     case EntityState.Added:
                         entry.Entity.Created = DateTime.UtcNow;
+                        entry.Entity.LastModified = DateTime.UtcNow;
                         break;
                     case EntityState.Modified:
                         entry.Entity.LastModified = DateTime.UtcNow;

@@ -50,7 +50,7 @@ namespace BigBlueButton.Client
         private string ConstructUrl(string baseUrl, string secret, string callName, string query, bool full = false)
         {
             var checksum = CheksumGenerator.Generate(callName, secret, query);
-            var url = $"{baseUrl}{callName}?{query}&checksum={checksum}";
+            var url = $"{baseUrl}/api/{callName}?{query}&checksum={checksum}";
             if (full) url = $"{_httpClient.BaseAddress}{url}";
             return url;
         }
