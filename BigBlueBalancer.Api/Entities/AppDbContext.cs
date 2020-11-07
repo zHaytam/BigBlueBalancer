@@ -11,6 +11,7 @@ namespace BigBlueBalancer.Api.Entities
 
         public DbSet<Server> Servers { get; set; }
         public DbSet<Meeting> Meetings { get; set; }
+        public DbSet<ServerStats> ServerStats { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

@@ -5,6 +5,7 @@ using BigBlueBalancer.Api.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BigBlueBalancer.Api.Controllers
@@ -56,6 +57,16 @@ namespace BigBlueBalancer.Api.Controllers
             _appDbContext.Servers.Remove(server);
             await _appDbContext.SaveChangesAsync();
             return Ok();
+        }
+
+        [HttpGet("{id}/stats")]
+        public async Task<List<ServerStatsDto>> ListStats(short id)
+        {
+            return await _appDbContext
+                .ServerStats
+                .Where(s => s.ServerId == id)
+                .ProjectTo<ServerStatsDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
     }
 }
