@@ -17,19 +17,5 @@ namespace BigBlueBalancer.Api.DTOs
             MessageKey = "checksumError",
             Message = "You did not pass the checksum security check"
         };
-
-        public static BaseBBBResponse UnavailableServer { get; } = new BaseBBBResponse
-        {
-            ReturnCode = "FAILED",
-            MessageKey = "unavailableServer",
-            Message = "[BigBlueBalancer] Unavailble server"
-        };
-
-        public static BaseBBBResponse MeetingNotFound { get; } = new BaseBBBResponse
-        {
-            ReturnCode = "FAILED",
-            MessageKey = "notFound",
-            Message = "We could not find a meeting with that meeting ID"
-        };
     }
 }

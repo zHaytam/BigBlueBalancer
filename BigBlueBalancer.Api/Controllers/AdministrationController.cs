@@ -48,7 +48,14 @@ namespace BigBlueBalancer.Api.Controllers
 
             var server = await GetAvailableServer();
             if (server == null)
-                return Ok(BaseBBBResponse.UnavailableServer);
+            {
+                return Ok(new BaseBBBResponse
+                {
+                    ReturnCode = "FAILED",
+                    MessageKey = "unavailableServer",
+                    Message = "[BigBlueBalancer] Unavailble server"
+                });
+            }
 
             var response = await _bbbClient.Create(server.Url, server.Secret, request);
             if (response.ReturnCode == "SUCCESS")
@@ -69,12 +76,7 @@ namespace BigBlueBalancer.Api.Controllers
             if (!IsChecksumValid("join", request, dto.Checksum))
                 return Ok(BaseBBBResponse.ChecksumError);
 
-            var meeting = await _appDbContext
-                .Meetings
-                .Where(m => m.Running && m.MeetingID == dto.MeetingID)
-                .Include(s => s.Server)
-                .FirstOrDefaultAsync();
-
+            var meeting = await GetMeeting(dto.MeetingID);
             if (meeting == null)
                 return NotFound();
 

@@ -3,12 +3,10 @@ using BigBlueBalancer.Api.Entities;
 using BigBlueButton.Client;
 using BigBlueButton.Client.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BigBlueBalancer.Api.Controllers
@@ -33,12 +31,7 @@ namespace BigBlueBalancer.Api.Controllers
         [HttpGet("isMeetingRunning")]
         public async Task<IsMeetingRunningResponse> IsMeetingRunning(string meetingID)
         {
-            var meeting = await _appDbContext
-                .Meetings
-                .Where(m => m.Running && m.MeetingID == meetingID)
-                .Include(s => s.Server)
-                .FirstOrDefaultAsync();
-
+            var meeting = await GetMeeting(meetingID);
             if (meeting == null || !meeting.Server.Up)
             {
                 _logger.LogWarning($"Meeting '{meetingID}' not found or it's server is down.");
@@ -50,7 +43,7 @@ namespace BigBlueBalancer.Api.Controllers
             }
 
             return await _bbbClient.IsMeetingRunning(meeting.Server.Url, meeting.Server.Secret, meetingID);
-        } 
+        }
 
         [HttpGet("getMeetings")]
         public async Task<GetMeetingsResponse> GetMeetings()
@@ -84,6 +77,24 @@ namespace BigBlueBalancer.Api.Controllers
             }
 
             return response;
+        }
+
+        [HttpGet("getMeetingInfo")]
+        public async Task<GetMeetingInfoResponse> GetMeetingInfo(string meetingID)
+        {
+            var meeting = await GetMeeting(meetingID);
+            if (meeting == null || !meeting.Server.Up)
+            {
+                _logger.LogWarning($"Meeting '{meetingID}' not found or it's server is down.");
+                return new GetMeetingInfoResponse
+                {
+                    ReturnCode = "FAILED",
+                    MessageKey = "notFound",
+                    Message = "We could not find a meeting with that meeting ID"
+                };
+            }
+
+            return await _bbbClient.GetMeetingInfo(meeting.Server.Url, meeting.Server.Secret, meetingID);
         }
     }
 }

@@ -23,9 +23,19 @@ namespace BigBlueBalancer.Api.Controllers
             _configuration = configuration;
         }
 
-        protected Task<Server> GetAvailableServer() => _appDbContext.Servers.Where(s => s.Up).OrderBy(s => s.Load).FirstOrDefaultAsync();
+        protected Task<Server> GetAvailableServer() => _appDbContext
+            .Servers
+            .Where(s => s.Up)
+            .OrderBy(s => s.Load)
+            .FirstOrDefaultAsync();
 
         protected Task<List<Server>> GetAvailableServers() => _appDbContext.Servers.Where(s => s.Up).ToListAsync();
+
+        protected Task<Meeting> GetMeeting(string meetingId) => _appDbContext
+                .Meetings
+                .Where(m => m.Running && m.MeetingID == meetingId)
+                .Include(s => s.Server)
+                .FirstOrDefaultAsync();
 
         protected bool IsChecksumValid<T>(string callName, T request, string checksum) where T : class
         {
