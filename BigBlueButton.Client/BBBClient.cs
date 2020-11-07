@@ -35,6 +35,13 @@ namespace BigBlueButton.Client
 
         #region Monitoring
 
+        public async Task<IsMeetingRunningResponse> IsMeetingRunning(string baseUrl, string secret, string meetingId)
+            => await ExecuteRequest<IsMeetingRunningResponse>(baseUrl, secret, "isMeetingRunning", 
+                new Dictionary<string, string>
+            {
+                { "meetingID", meetingId }
+            });
+
         public async Task<GetMeetingsResponse> GetMeetings(string baseUrl, string secret)
             => await ExecuteRequest<GetMeetingsResponse>(baseUrl, secret, "getMeetings");
 

@@ -9,6 +9,7 @@ namespace BigBlueButton.Client
         public Task<CreateResponse> Create(string baseUrl, string secret, CreateRequest request);
         public string GetJoinUrl(string baseUrl, string secret, JoinRequest request);
 
+        public Task<IsMeetingRunningResponse> IsMeetingRunning(string baseUrl, string secret, string meetingId);
         public Task<GetMeetingsResponse> GetMeetings(string baseUrl, string secret);
         public Task<GetMeetingInfoResponse> GetMeetingInfo(string baseUrl, string secret, string meetingId);
     }
