@@ -4,6 +4,7 @@ using BigBlueButton.Client.Parameters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,10 +23,9 @@ namespace BigBlueBalancer.Api.Controllers
             _configuration = configuration;
         }
 
-        protected Task<Server> GetAvailableServer() => _appDbContext.Servers
-            .Where(s => s.Up)
-            .OrderBy(s => s.Load)
-            .FirstOrDefaultAsync();
+        protected Task<Server> GetAvailableServer() => _appDbContext.Servers.Where(s => s.Up).OrderBy(s => s.Load).FirstOrDefaultAsync();
+
+        protected Task<List<Server>> GetAvailableServers() => _appDbContext.Servers.Where(s => s.Up).ToListAsync();
 
         protected bool IsChecksumValid<T>(string callName, T request, string checksum) where T : class
         {
