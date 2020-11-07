@@ -24,5 +24,12 @@ namespace BigBlueBalancer.Api.DTOs
             MessageKey = "unavailableServer",
             Message = "[BigBlueBalancer] Unavailble server"
         };
+
+        public static BaseBBBResponse MeetingNotFound { get; } = new BaseBBBResponse
+        {
+            ReturnCode = "FAILED",
+            MessageKey = "notFound",
+            Message = "We could not find a meeting with that meeting ID"
+        };
     }
 }

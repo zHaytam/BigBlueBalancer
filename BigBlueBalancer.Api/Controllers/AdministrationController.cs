@@ -5,7 +5,6 @@ using BigBlueBalancer.Api.Entities;
 using BigBlueButton.Client;
 using BigBlueButton.Client.Models.Requests;
 using BigBlueButton.Client.Models.Responses;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -21,7 +20,7 @@ namespace BigBlueBalancer.Api.Controllers
         private readonly AppDbContext _appDbContext;
         private readonly IMapper _mapper;
 
-        public AdministrationController(IBBBClient bbbClient, AppDbContext appDbContext, IMapper mapper, 
+        public AdministrationController(IBBBClient bbbClient, AppDbContext appDbContext, IMapper mapper,
             IConfiguration configuration) : base(appDbContext, configuration)
         {
             _bbbClient = bbbClient;
@@ -30,6 +29,7 @@ namespace BigBlueBalancer.Api.Controllers
         }
 
         [HttpGet("create")]
+        [ProducesResponseType(typeof(CreateResponse), 200)]
         public async Task<IActionResult> Create([FromQuery] CreateMeetingDto dto)
         {
             var request = _mapper.Map<CreateRequest>(dto);
@@ -60,6 +60,26 @@ namespace BigBlueBalancer.Api.Controllers
             }
 
             return Ok(response);
+        }
+
+        [HttpGet("join")]
+        public async Task<IActionResult> Join([FromQuery] JoinMeetingDto dto)
+        {
+            var request = _mapper.Map<JoinRequest>(dto);
+            if (!IsChecksumValid("join", request, dto.Checksum))
+                return Ok(BaseBBBResponse.ChecksumError);
+
+            var meeting = await _appDbContext
+                .Meetings
+                .Where(m => m.Running && m.MeetingID == dto.MeetingID)
+                .Include(s => s.Server)
+                .FirstOrDefaultAsync();
+
+            if (meeting == null)
+                return NotFound();
+
+            var joinUrl = _bbbClient.GetJoinUrl(meeting.Server.Url, meeting.Server.Secret, request);
+            return Redirect(joinUrl);
         }
     }
 }

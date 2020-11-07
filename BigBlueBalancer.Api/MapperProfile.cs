@@ -16,6 +16,7 @@ namespace BigBlueBalancer.Api
             CreateMap<CreateMeetingDto, CreateRequest>();
             CreateMap<CreateResponse, Entities.Meeting>();
             CreateMap<Entities.Meeting, CreateResponse>();
+            CreateMap<JoinMeetingDto, JoinRequest>();
         }
     }
 }
