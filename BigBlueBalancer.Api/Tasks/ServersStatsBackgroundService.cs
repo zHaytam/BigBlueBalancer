@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -39,7 +40,7 @@ namespace BigBlueBalancer.Api.Tasks
             var logger = scope.ServiceProvider.GetRequiredService<ILogger<ServersStatsBackgroundService>>();
             var appDbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             var bbbClient = scope.ServiceProvider.GetRequiredService<IBBBClient>();
-            var servers = await appDbContext.Servers.ToListAsync();
+            var servers = await appDbContext.Servers.Include(s => s.Meetings.Where(m => m.Running)).ToListAsync();
             logger.LogDebug($"Refreshing stats of {servers.Count} servers.");
             
             foreach (var server in servers)
@@ -51,6 +52,7 @@ namespace BigBlueBalancer.Api.Tasks
                 {
                     var response = await bbbClient.GetMeetings(server.Url, server.Secret);
                     SetStats(stats, response);
+                    CheckMeetings(server, response);
                 }
                 catch (Exception ex) // Maybe be more specific?
                 {
@@ -65,6 +67,18 @@ namespace BigBlueBalancer.Api.Tasks
             }
 
             await appDbContext.SaveChangesAsync();
+        }
+
+        private static void CheckMeetings(Server server, GetMeetingsResponse response)
+        {
+            var ongoingMeetingIds = response.Meetings.Items.Select(i => i.MeetingID).ToHashSet();
+            foreach (var meeting in server.Meetings)
+            {
+                if (!ongoingMeetingIds.Contains(meeting.MeetingID))
+                {
+                    meeting.Running = false;
+                }    
+            }
         }
 
         private static void SetStats(ServerStats stats, GetMeetingsResponse response)

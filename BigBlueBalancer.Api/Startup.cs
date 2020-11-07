@@ -37,7 +37,7 @@ namespace BigBlueBalancer.Api
             services.AddScoped<IBBBClient, BBBClient>();
             services.AddAutoMapper(typeof(Startup));
 
-            // services.AddHostedService<ServersStatsBackgroundService>();
+            services.AddHostedService<ServersStatsBackgroundService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
