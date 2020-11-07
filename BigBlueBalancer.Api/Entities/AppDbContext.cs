@@ -10,6 +10,7 @@ namespace BigBlueBalancer.Api.Entities
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Server> Servers { get; set; }
+        public DbSet<Meeting> Meetings { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

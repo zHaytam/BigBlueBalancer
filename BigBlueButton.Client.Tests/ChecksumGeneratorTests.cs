@@ -15,7 +15,7 @@ namespace BigBlueButton.Client.Tests
             string query = "name=Test+Meeting&meetingID=abc123&attendeePW=111222&moderatorPW=333444";
 
             // Act
-            string checksum = CheksumGenerator.Generate(callName, _secret, query);
+            string checksum = ChecksumGenerator.Generate(callName, _secret, query);
 
             // Assert
             Assert.Equal("1fcbb0c4fc1f039f73aa6d697d2db9ba7f803f17", checksum);

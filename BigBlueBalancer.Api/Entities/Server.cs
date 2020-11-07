@@ -13,6 +13,7 @@ namespace BigBlueBalancer.Api.Entities
         public double Load { get; set; }
 
         public List<ServerStats> Stats { get; set; } = new List<ServerStats>();
+        public List<Meeting> Meetings { get; set; } = new List<Meeting>();
     }
 
     public class ServerConfiguration : IEntityTypeConfiguration<Server>

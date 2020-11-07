@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BigBlueButton.Client.Helpers
 {
-    public static class CheksumGenerator
+    public static class ChecksumGenerator
     {
         public static string Generate(string callName, string secret, string query = null)
         {

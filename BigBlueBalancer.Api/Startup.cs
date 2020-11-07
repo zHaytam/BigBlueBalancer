@@ -4,6 +4,7 @@ using BigBlueBalancer.Api.Tasks;
 using BigBlueButton.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,9 +25,10 @@ namespace BigBlueBalancer.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(options => options.OutputFormatters.Add(new XmlSerializerOutputFormatter()));
             services.AddSwaggerGen(c =>
             {
+                c.DescribeAllParametersInCamelCase();
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BigBlueBalancer.Api", Version = "v1" });
             });
 
@@ -35,7 +37,7 @@ namespace BigBlueBalancer.Api
             services.AddScoped<IBBBClient, BBBClient>();
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddHostedService<ServersStatsBackgroundService>();
+            // services.AddHostedService<ServersStatsBackgroundService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
