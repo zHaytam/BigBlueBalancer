@@ -40,7 +40,9 @@ namespace BigBlueButton.Client.Parameters
                 sb.Append($"{entry.Name}={strValue}&");
             }
 
-            sb.Length--;
+            if (sb.Length > 0)
+                sb.Length--;
+
             return sb.ToString();
         }
 
