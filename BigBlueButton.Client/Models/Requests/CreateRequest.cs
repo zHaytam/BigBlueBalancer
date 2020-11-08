@@ -1,4 +1,6 @@
 ﻿using BigBlueButton.Client.Parameters;
+using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace BigBlueButton.Client.Models.Requests
 {
@@ -50,5 +52,30 @@ namespace BigBlueButton.Client.Models.Requests
         {
             MeetingId = meetingId;
         }
+    }
+
+    [XmlRoot(ElementName = "document")]
+    public class Document
+    {
+        [XmlAttribute(AttributeName = "url")]
+        public string Url { get; set; }
+        [XmlAttribute(AttributeName = "filename")]
+        public string Filename { get; set; }
+    }
+
+    [XmlRoot(ElementName = "module")]
+    public class Module
+    {
+        [XmlElement(ElementName = "document")]
+        public List<Document> Documents { get; set; }
+        [XmlAttribute(AttributeName = "name")]
+        public string Name { get; set; }
+    }
+
+    [XmlRoot(ElementName = "modules")]
+    public class Modules
+    {
+        [XmlElement(ElementName = "module")]
+        public Module Module { get; set; }
     }
 }

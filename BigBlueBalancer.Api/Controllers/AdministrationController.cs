@@ -8,7 +8,7 @@ using BigBlueButton.Client.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
 
 namespace BigBlueBalancer.Api.Controllers
@@ -58,6 +58,48 @@ namespace BigBlueBalancer.Api.Controllers
             }
 
             var response = await _bbbClient.Create(server.Url, server.Secret, request);
+            if (response.ReturnCode == "SUCCESS")
+            {
+                var meeting = _mapper.Map<Entities.Meeting>(response);
+                meeting.Running = true;
+                server.Meetings.Add(meeting);
+                await _appDbContext.SaveChangesAsync();
+            }
+
+            return Ok(response);
+        }
+
+        [HttpPost("create")]
+        [Consumes(MediaTypeNames.Application.Xml)]
+        [ProducesResponseType(typeof(CreateResponse), 200)]
+        public async Task<IActionResult> Create([FromQuery] CreateMeetingDto dto, [FromBody] Modules modules)
+        {
+            var request = _mapper.Map<CreateRequest>(dto);
+            if (!IsChecksumValid("create", request, dto.Checksum))
+                return Ok(BaseBBBResponse.ChecksumError);
+
+            var existingMeeting = await _appDbContext.Meetings.FirstOrDefaultAsync(m => m.Running && m.MeetingID == dto.MeetingId);
+            if (existingMeeting != null)
+            {
+                var earlyResponse = _mapper.Map<CreateResponse>(existingMeeting);
+                earlyResponse.ReturnCode = "SUCCESS";
+                earlyResponse.MessageKey = "duplicateWarning";
+                earlyResponse.Message = "This conference was already in existence and may currently be in progress.";
+                return Ok(earlyResponse);
+            }
+
+            var server = await GetAvailableServer();
+            if (server == null)
+            {
+                return Ok(new BaseBBBResponse
+                {
+                    ReturnCode = "FAILED",
+                    MessageKey = "unavailableServer",
+                    Message = "[BigBlueBalancer] Unavailble server"
+                });
+            }
+
+            var response = await _bbbClient.Create(server.Url, server.Secret, request, modules);
             if (response.ReturnCode == "SUCCESS")
             {
                 var meeting = _mapper.Map<Entities.Meeting>(response);

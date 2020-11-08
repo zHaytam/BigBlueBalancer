@@ -25,7 +25,7 @@ namespace BigBlueBalancer.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(options => options.OutputFormatters.Add(new XmlSerializerOutputFormatter()));
+            services.AddControllers().AddXmlSerializerFormatters();
             services.AddSwaggerGen(c =>
             {
                 c.DescribeAllParametersInCamelCase();

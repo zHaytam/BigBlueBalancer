@@ -6,12 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
 
 namespace BigBlueBalancer.Api.Controllers
 {
     [ApiController]
-    [Produces("application/xml")]
+    [Produces(MediaTypeNames.Application.Xml)]
     public abstract class BBBController : Controller
     {
         private readonly AppDbContext _appDbContext;
