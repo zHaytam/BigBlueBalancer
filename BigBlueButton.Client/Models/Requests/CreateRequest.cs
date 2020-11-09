@@ -17,6 +17,7 @@ namespace BigBlueButton.Client.Models.Requests
         public string DialNumber { get; set; }
         public string VoiceBridge { get; set; }
         public int? MaxParticipants { get; set; }
+        public string LogoutURL { get; set; }
         public bool? Record { get; set; }
         public int? Duration { get; set; }
         public bool? IsBreakout { get; set; }

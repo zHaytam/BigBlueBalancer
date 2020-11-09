@@ -4,7 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
-using System.Web;
 
 namespace BigBlueButton.Client.Parameters
 {
@@ -36,7 +35,7 @@ namespace BigBlueButton.Client.Parameters
                 if (value == null)
                     continue;
 
-                var strValue = HttpUtility.UrlEncode(value.ToString());
+                var strValue = Uri.EscapeDataString(value.ToString());
                 sb.Append($"{entry.Name}={strValue}&");
             }
 

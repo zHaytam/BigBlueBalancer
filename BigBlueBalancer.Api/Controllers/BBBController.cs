@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BigBlueBalancer.Api.Controllers
@@ -40,7 +41,8 @@ namespace BigBlueBalancer.Api.Controllers
 
         protected bool IsChecksumValid<T>(string callName, T request, string checksum) where T : class
         {
-            var query = ParametersExtractor.GenerateQueryString(request);
+            var query = HttpContext.Request.QueryString.ToString();
+            query = Regex.Replace(query[1..], "&checksum=[^&]+", "");
             var realChecksum = ChecksumGenerator.Generate(callName, _configuration["Secret"], query);
             return realChecksum == checksum;
         }
