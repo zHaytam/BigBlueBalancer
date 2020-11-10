@@ -1,28 +1,23 @@
 ﻿using BigBlueBalancer.Api.Entities;
-using BigBlueButton.Client.Helpers;
-using BigBlueButton.Client.Parameters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BigBlueBalancer.Api.Controllers
 {
     [ApiController]
+    [Route("bigbluebutton/api")]
     [Produces(MediaTypeNames.Application.Xml)]
     public abstract class BBBController : Controller
     {
         private readonly AppDbContext _appDbContext;
-        private readonly IConfiguration _configuration;
 
-        public BBBController(AppDbContext appDbContext, IConfiguration configuration)
+        public BBBController(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
-            _configuration = configuration;
         }
 
         protected Task<Server> GetAvailableServer() => _appDbContext
@@ -38,13 +33,5 @@ namespace BigBlueBalancer.Api.Controllers
                 .Where(m => m.Running && m.MeetingID == meetingId)
                 .Include(s => s.Server)
                 .FirstOrDefaultAsync();
-
-        protected bool IsChecksumValid<T>(string callName, T request, string checksum) where T : class
-        {
-            var query = HttpContext.Request.QueryString.ToString();
-            query = Regex.Replace(query[1..], "&checksum=[^&]+", "");
-            var realChecksum = ChecksumGenerator.Generate(callName, _configuration["Secret"], query);
-            return realChecksum == checksum;
-        }
     }
 }

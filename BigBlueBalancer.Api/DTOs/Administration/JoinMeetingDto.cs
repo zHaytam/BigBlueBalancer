@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BigBlueBalancer.Api.DTOs.Administration
 {
-    public class JoinMeetingDto : BaseBBBRequest
+    public class JoinMeetingDto
     {
         [Required]
         public string FullName { get; set; }

@@ -1,10 +1,11 @@
 using AutoMapper;
 using BigBlueBalancer.Api.Entities;
+using BigBlueBalancer.Api.Filters;
 using BigBlueBalancer.Api.Tasks;
 using BigBlueButton.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Routing.Patterns;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,7 @@ namespace BigBlueBalancer.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddXmlSerializerFormatters();
+            services.AddControllers(o => o.Filters.Add<ChecksumActionFilter>()).AddXmlSerializerFormatters();
             services.AddSwaggerGen(c =>
             {
                 c.DescribeAllParametersInCamelCase();

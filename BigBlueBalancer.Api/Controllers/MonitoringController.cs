@@ -1,48 +1,42 @@
-﻿using AutoMapper;
-using BigBlueBalancer.Api.Entities;
+﻿using BigBlueBalancer.Api.Entities;
 using BigBlueButton.Client;
 using BigBlueButton.Client.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace BigBlueBalancer.Api.Controllers
 {
-    [Route("bigbluebutton/api")]
     public class MonitoringController : BBBController
     {
         private readonly IBBBClient _bbbClient;
-        private readonly AppDbContext _appDbContext;
-        private readonly IMapper _mapper;
         private readonly ILogger<MonitoringController> _logger;
 
-        public MonitoringController(IBBBClient bbbClient, AppDbContext appDbContext, IMapper mapper,
-            ILogger<MonitoringController> logger, IConfiguration configuration) : base(appDbContext, configuration)
+        public MonitoringController(IBBBClient bbbClient, AppDbContext appDbContext,
+            ILogger<MonitoringController> logger) : base(appDbContext)
         {
             _bbbClient = bbbClient;
-            _appDbContext = appDbContext;
-            _mapper = mapper;
             _logger = logger;
         }
 
         [HttpGet("isMeetingRunning")]
-        public async Task<IsMeetingRunningResponse> IsMeetingRunning(string meetingID)
+        public async Task<IActionResult> IsMeetingRunning([Required] string meetingID)
         {
             var meeting = await GetMeeting(meetingID);
             if (meeting == null || !meeting.Server.Up)
             {
                 _logger.LogWarning($"Meeting '{meetingID}' not found or it's server is down.");
-                return new IsMeetingRunningResponse
+                return Ok(new IsMeetingRunningResponse
                 {
                     ReturnCode = "SUCCESS",
                     Running = "false"
-                };
+                });
             }
 
-            return await _bbbClient.IsMeetingRunning(meeting.Server.Url, meeting.Server.Secret, meetingID);
+            return Ok(await _bbbClient.IsMeetingRunning(meeting.Server.Url, meeting.Server.Secret, meetingID));
         }
 
         [HttpGet("getMeetings")]
@@ -80,7 +74,7 @@ namespace BigBlueBalancer.Api.Controllers
         }
 
         [HttpGet("getMeetingInfo")]
-        public async Task<GetMeetingInfoResponse> GetMeetingInfo(string meetingID)
+        public async Task<GetMeetingInfoResponse> GetMeetingInfo([Required] string meetingID)
         {
             var meeting = await GetMeeting(meetingID);
             if (meeting == null || !meeting.Server.Up)
