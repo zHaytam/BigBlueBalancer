@@ -13,22 +13,22 @@ namespace BigBlueBalancer.Api.Controllers
     [Produces(MediaTypeNames.Application.Xml)]
     public abstract class BBBController : Controller
     {
-        private readonly AppDbContext _appDbContext;
-
         public BBBController(AppDbContext appDbContext)
         {
-            _appDbContext = appDbContext;
+            AppDbContext = appDbContext;
         }
 
-        protected Task<Server> GetAvailableServer() => _appDbContext
+        protected AppDbContext AppDbContext { get; }
+
+        protected Task<Server> GetAvailableServer() => AppDbContext
             .Servers
             .Where(s => s.Up)
             .OrderBy(s => s.Load)
             .FirstOrDefaultAsync();
 
-        protected Task<List<Server>> GetAvailableServers() => _appDbContext.Servers.Where(s => s.Up).ToListAsync();
+        protected Task<List<Server>> GetAvailableServers() => AppDbContext.Servers.Where(s => s.Up).ToListAsync();
 
-        protected Task<Meeting> GetMeeting(string meetingId) => _appDbContext
+        protected Task<Meeting> GetMeeting(string meetingId) => AppDbContext
                 .Meetings
                 .Where(m => m.Running && m.MeetingID == meetingId)
                 .Include(s => s.Server)
