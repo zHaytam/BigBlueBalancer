@@ -5,6 +5,7 @@ using BigBlueBalancer.Api.Tasks;
 using BigBlueButton.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Routing.Patterns;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,7 +27,11 @@ namespace BigBlueBalancer.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(o => o.Filters.Add<ChecksumActionFilter>()).AddXmlSerializerFormatters();
+            services.AddControllers(o =>
+            {
+                o.Filters.Add<ChecksumActionFilter>();
+                o.Filters.Add<DecodeParamsFilter>();
+            }).AddXmlSerializerFormatters();
             services.AddSwaggerGen(c =>
             {
                 c.DescribeAllParametersInCamelCase();
@@ -34,7 +39,8 @@ namespace BigBlueBalancer.Api
             });
 
             services.AddHttpClient();
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
+                ServerVersion.AutoDetect(Configuration.GetConnectionString("DefaultConnection"))));
             services.AddScoped<IBBBClient, BBBClient>();
             services.AddAutoMapper(typeof(Startup));
 
@@ -46,11 +52,17 @@ namespace BigBlueBalancer.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BigBlueBalancer.Api v1"));
             }
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BigBlueBalancer.Api v1"));
+
             app.UseSerilogRequestLogging();
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             app.UseHttpsRedirection();
             app.UseRouting();

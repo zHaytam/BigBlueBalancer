@@ -44,7 +44,7 @@ namespace BigBlueButton.Client
         }
 
         public string GetJoinUrl(string baseUrl, string secret, JoinRequest request)
-            => ConstructUrl(baseUrl, secret, "join", ParametersExtractor.GenerateQueryString(request), true);
+            => ConstructUrl(baseUrl, secret, "join", ParametersExtractor.GenerateQueryString(request));
 
         #endregion
 
@@ -69,12 +69,10 @@ namespace BigBlueButton.Client
 
         #endregion
 
-        private string ConstructUrl(string baseUrl, string secret, string callName, string query, bool full = false)
+        private string ConstructUrl(string baseUrl, string secret, string callName, string query)
         {
             var checksum = ChecksumGenerator.Generate(callName, secret, query);
-            var url = $"{baseUrl}/api/{callName}?{query}&checksum={checksum}";
-            if (full) url = $"{_httpClient.BaseAddress}{url}";
-            return url;
+            return $"{baseUrl}/api/{callName}?{query}&checksum={checksum}";
         }
 
         private async Task<T> ExecuteRequest<T>(string baseUrl, string secret, string callName,
