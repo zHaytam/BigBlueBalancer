@@ -23,10 +23,16 @@ namespace BigBlueBalancer.Api.Filters
                 return;
 
             var checksum = context.HttpContext.Request.Query["checksum"];
+            if (checksum.Count == 0)
+            {
+                context.Result = new OkObjectResult(BaseBBBResponse.ChecksumError);
+                return;
+            }
+
             var actionName = (context.ActionDescriptor as ControllerActionDescriptor) .ActionName;
             var callName = $"{char.ToLower(actionName[0])}{actionName[1..]}";
             var query = context.HttpContext.Request.QueryString.ToString();
-            query = Regex.Replace(query[1..], "&checksum=[^&]+", "");
+            query = Regex.Replace(query[1..], "&?checksum=[^&]+", "");
             var realChecksum = ChecksumGenerator.Generate(callName, _configuration["Secret"], query);
 
             if (checksum != realChecksum)
