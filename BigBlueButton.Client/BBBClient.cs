@@ -69,6 +69,14 @@ namespace BigBlueButton.Client
 
         #endregion
 
+        #region Recording
+
+        public async Task<GetRecordingsResponse> GetRecordings(string baseUrl, string secret, GetRecordingsRequest request)
+            => await ExecuteRequest<GetRecordingsResponse>(baseUrl, secret, "getRecordings", 
+                ParametersExtractor.GenerateQueryString(request));
+
+        #endregion
+
         private string ConstructUrl(string baseUrl, string secret, string callName, string query)
         {
             var checksum = ChecksumGenerator.Generate(callName, secret, query);
