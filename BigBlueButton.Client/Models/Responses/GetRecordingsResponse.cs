@@ -7,7 +7,7 @@ namespace BigBlueButton.Client.Models.Responses
 	public class RecordingMetadata
 	{
 		[XmlElement(ElementName = "isBreakout")]
-		public string IsBreakout { get; set; }
+		public bool IsBreakout { get; set; }
 		[XmlElement(ElementName = "meetingName")]
 		public string MeetingName { get; set; }
 		[XmlElement(ElementName = "gl-listed")]
@@ -24,9 +24,11 @@ namespace BigBlueButton.Client.Models.Responses
 		[XmlElement(ElementName = "url")]
 		public string Url { get; set; }
 		[XmlElement(ElementName = "processingTime")]
-		public string ProcessingTime { get; set; }
+		public long ProcessingTime { get; set; }
 		[XmlElement(ElementName = "length")]
-		public string Length { get; set; }
+		public int Length { get; set; }
+		[XmlElement("size")]
+		public long Size { get; set; }
 		[XmlElement(ElementName = "preview")]
 		public Preview Preview { get; set; }
 	}
@@ -77,17 +79,21 @@ namespace BigBlueButton.Client.Models.Responses
 		[XmlElement(ElementName = "name")]
 		public string Name { get; set; }
 		[XmlElement(ElementName = "isBreakout")]
-		public string IsBreakout { get; set; }
+		public bool IsBreakout { get; set; }
 		[XmlElement(ElementName = "published")]
-		public string Published { get; set; }
+		public bool Published { get; set; }
 		[XmlElement(ElementName = "state")]
 		public string State { get; set; }
 		[XmlElement(ElementName = "startTime")]
-		public string StartTime { get; set; }
+		public long StartTime { get; set; }
 		[XmlElement(ElementName = "endTime")]
-		public string EndTime { get; set; }
+		public long EndTime { get; set; }
 		[XmlElement(ElementName = "participants")]
-		public string Participants { get; set; }
+		public int Participants { get; set; }
+		[XmlElement("size")]
+		public long Size { get; set; }
+		[XmlElement("rawSize")]
+		public long RawSize { get; set; }
 		[XmlElement(ElementName = "metadata")]
 		public RecordingMetadata Metadata { get; set; }
 		[XmlElement(ElementName = "playback")]
